@@ -6,8 +6,8 @@ import Container from '@mui/material/Container';
 import CssBaseline from '@mui/material/CssBaseline';
 import Button from '@mui/material/Button';
 import ImageList from '@mui/material/ImageList';
-import ImageListItem from '@mui/material/ImageListItem';
 import { Box } from '@mui/system';
+
 
 function Seed(props){
   return <Box sx={{
@@ -37,8 +37,8 @@ function Generate(props){
 }
 
 export default function BasicGrid() {
-  const [seed, setSeed] = useState(null);
-
+  const [seed, setSeed] = useState('3952177198');
+  const [image, setImage] = useState('seed3952177198.png');
   return (
     <Container component="main" maxWidth="xs" sx={{
       textAlign:'center'
@@ -53,29 +53,17 @@ export default function BasicGrid() {
         }}
         >
           <Seed seed={seed}></Seed>
-          <ImageList sx={{ width: 256, height: 256, borderRadius: 3, marginTop: -2}} cols={1}>
-          {itemData.map((item) => (
-            <ImageListItem key={item.img}>
-              <img
-                src={`${item.img}?w=164&h=164&fit=crop&auto=format`}
-                srcSet={`${item.img}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
-                alt={item.title}
-                loading="lazy"
-              />
-            </ImageListItem>
-          ))}
-        </ImageList>
+          <ImageList sx={{ width: 256, height: 256, borderRadius: 5, marginTop: -2}} cols={1}>
+            <img src={image} alt="IDOL_FACE"/>
+          </ImageList>
         </Box>
-          <Generate onChangeMode={()=>{
-            setSeed(Math.floor(Math.random() * (2**32-1)))
+          <Generate onChangeMode={async ()=>{
+            setSeed(Math.floor(Math.random() * (2**32-1)));
+            console.log(seed);
+            await fetch('http://127.0.0.1:5000/image?seed=' + seed);
+            setImage('seed3952177198.png');
+            
           }}></Generate>
     </Container>
   );
 }
-
-const itemData = [
-  {
-    img: 'https://images.unsplash.com/photo-1551963831-b3b1ca40c98e',
-    title: 'Breakfast',
-  }
-];
