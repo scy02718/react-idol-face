@@ -1,6 +1,4 @@
 import * as React from 'react';
-//import { styled } from '@mui/material/styles';
-// import Paper from '@mui/material/Paper';
 import { useEffect, useState } from 'react';
 import Grid from '@mui/material/Grid';
 import Container from '@mui/material/Container';
@@ -13,15 +11,41 @@ import Switch from '@mui/material/Switch';
 import Typography from '@mui/material/Typography';
 import Slider from '@mui/material/Slider';
 import { Box } from '@mui/system';
-
+import IconButton from '@mui/material/IconButton';
+import StarIcon from '@mui/icons-material/Star';
+import favorite from './favorite.json'
 
 function Seed(props){
-  return <Box sx={{
+  var starColor="default";
+  if (props.star){
+    starColor="warning";
+  }
+
+  return <Grid container>
+    <Grid item xs={9}>
+    <Box sx={{
     fontSize: 25,
     fontFamily: 'Arial',
     fontWeight: 'bold',
-    mb:3
+    mb:3,
+    ml:8,
+    mt:0.3
   }}>SEED: {props.seed}</Box>
+  </Grid>
+  <Grid item xd={3}>
+    <IconButton aria-label="star" color= {starColor} sx={{
+      ml:-0.5,
+      '&:hover':{
+        color:'#ed6c02'
+      }
+    }} onClick={(event)=>{
+      event.preventDefault();
+      props.onChangeMode();
+    }}>
+      <StarIcon/>
+    </IconButton>
+  </Grid>
+  </Grid>
 }
 
 function Generate(props){
@@ -53,6 +77,7 @@ export default function BasicGrid() {
   const [noise, setNoise] = useState(true);
   const [keepSeed, setKeepSeed] = useState(false);
   const [psi, setPsi] = useState(0.3);
+  const [star, setStar] = useState(false);
 
   const handleSliderChange = (event, newPsi) => {
     setPsi(newPsi);
@@ -87,7 +112,10 @@ export default function BasicGrid() {
           alignItems: 'center',
         }}
         >
-          <Seed seed={seed}></Seed>
+          <Seed seed={seed} star={star} onChangeMode={()=>{
+            setStar(!star);
+            console.log(star);
+          }}></Seed>
           <ImageList sx={{ width: 256, height: 256, borderRadius: 5, marginTop: -2}} cols={1}>
             <img src={'seed'+seed+'.png'} alt="IDOL_FACE"/>
           </ImageList>
@@ -95,6 +123,10 @@ export default function BasicGrid() {
         <Grid container>
           <Grid item xs={6} sx={{ pl:8}}>
           <Generate onChangeMode={async (tempSeed)=>{
+            if (star){
+              console.log("Hello");
+            }
+
             if (!keepSeed){
               setSeed(tempSeed);
               await fetch('http://127.0.0.1:7000/image?seed=' + tempSeed + '&noise=' + noise + '&psi='+psi); 
@@ -112,14 +144,14 @@ export default function BasicGrid() {
                 fontSize: 12,
                 fontFamily: 'Arial',
                 fontWeight: 'bold'
-              }}>Noise</Typography>} sx={{mx : 1, mt:-0.5}}/>
+              }}>Noise</Typography>} sx={{mx : 1, mt:-0.5, ml: -1}}/>
           <FormControlLabel control={
             <Switch checked={keepSeed} onChange={handleKeepSeedChange} colour='default' size='small'/>
               } label={<Typography sx={{
                 fontSize: 12,
                 fontFamily: 'Arial',
                 fontWeight: 'bold'
-              }}>Keep Seed</Typography>} sx={{mx : 1}}/>
+              }}>Keep Seed</Typography>} sx={{mx : 1, ml:-1}}/>
           </FormGroup>
           </Grid>
           </Grid>
