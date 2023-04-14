@@ -13,7 +13,6 @@ import Slider from '@mui/material/Slider';
 import { Box } from '@mui/system';
 import IconButton from '@mui/material/IconButton';
 import StarIcon from '@mui/icons-material/Star';
-import favorite from './favorite.json'
 
 function Seed(props){
   var starColor="default";
@@ -79,6 +78,9 @@ export default function BasicGrid() {
   const [psi, setPsi] = useState(0.3);
   const [star, setStar] = useState(false);
 
+  // let testData = JSON.parse(JSON.stringify(favorite));
+  // console.log(testData);
+
   const handleSliderChange = (event, newPsi) => {
     setPsi(newPsi);
   };
@@ -112,21 +114,22 @@ export default function BasicGrid() {
           alignItems: 'center',
         }}
         >
-          <Seed seed={seed} star={star} onChangeMode={()=>{
+          <Seed seed={seed} star={star} onChangeMode={async ()=>{
             setStar(!star);
-            console.log(star);
+            if (!star){
+              await fetch('http://127.0.0.1:7000/favorite?seed='+seed+'&psi='+psi+'&delete=false');
+            }
+            else {
+              await fetch('http://127.0.0.1:7000/favorite?seed='+seed+'&psi='+psi+'&delete=true');
+            }
           }}></Seed>
           <ImageList sx={{ width: 256, height: 256, borderRadius: 5, marginTop: -2}} cols={1}>
-            <img src={'seed'+seed+'.png'} alt="IDOL_FACE"/>
+            <img src={'seed'+seed+'psi'+psi+'.png'} alt="IDOL_FACE"/>
           </ImageList>
         </Box>
         <Grid container>
           <Grid item xs={6} sx={{ pl:8}}>
           <Generate onChangeMode={async (tempSeed)=>{
-            if (star){
-              console.log("Hello");
-            }
-
             if (!keepSeed){
               setSeed(tempSeed);
               await fetch('http://127.0.0.1:7000/image?seed=' + tempSeed + '&noise=' + noise + '&psi='+psi); 
