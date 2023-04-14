@@ -26,9 +26,17 @@ def favorite():
     changeJson(currentSeed, currentPsi, delete)
     return "JSON SUCCESSFULLY CHANGED"
 
+@app.route("/getFavorite")
+def getFavorite():
+    with open('../src/favorite.json') as f:
+        favData = json.load(f)
+    f.close()
+
+    return favData
+
 def changeJson(seed, psi, delete):
     img = {"seed": int(seed), "psi": float(psi)}
-    with open('favorite.json') as f:
+    with open('../src/favorite.json') as f:
         favData = json.load(f)
 
     if delete == 'false':
@@ -39,7 +47,7 @@ def changeJson(seed, psi, delete):
             if image['seed'] == int(seed) and image['psi'] == float(psi):
                 favData.pop(idx)
 
-    with open('favorite.json','w') as f:
+    with open('../src/favorite.json','w') as f:
         json.dump(favData,f,indent=2)
 
     f.close()    

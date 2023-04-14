@@ -71,6 +71,26 @@ function Generate(props){
   }}>Generate Image</Button>
 }
 
+function Favorites(){
+  return <Button variant="contained" sx={{
+    '&:hover':{
+      color:'black',
+      backgroundColor: 'gray',
+    },
+    bgcolor: 'white',
+    borderRadius: 3,  
+    color: 'black',
+    fontSize: 10,
+    fontFamily: 'Arial',
+    fontWeight: 'bold',
+    lineHeight: 2,
+    padding: 1.2,
+    textAlign: 'center',
+    mx : 5,
+    mt : 1.5  
+  }} href='/favorites'>Favorites</Button> 
+}
+
 export default function BasicGrid() {
   const [seed, setSeed] = useState(window.localStorage.getItem('seed'));
   const [noise, setNoise] = useState(true);
@@ -124,7 +144,7 @@ export default function BasicGrid() {
             }
           }}></Seed>
           <ImageList sx={{ width: 256, height: 256, borderRadius: 5, marginTop: -2}} cols={1}>
-            <img src={'seed'+seed+'psi'+psi+'.png'} alt="IDOL_FACE"/>
+            <img src={'seed'+seed+'.png'} alt="IDOL_FACE"/>
           </ImageList>
         </Box>
         <Grid container>
@@ -167,6 +187,7 @@ export default function BasicGrid() {
           </Typography>
           <Slider defaultValue={0.3} aria-label="PsiSlider" max={1.0} min={0.0} name="psi" step={0.01}
           valueLabelDisplay="auto" sx={{ width : 0.65}} onChangeCommitted={handleSliderChange}/>
+          <Favorites></Favorites>
     </Container>
   );
 }
