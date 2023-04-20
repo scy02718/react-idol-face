@@ -98,9 +98,6 @@ export default function BasicGrid() {
   const [psi, setPsi] = useState(0.3);
   const [star, setStar] = useState(false);
 
-  // let testData = JSON.parse(JSON.stringify(favorite));
-  // console.log(testData);
-
   const handleSliderChange = (event, newPsi) => {
     setPsi(newPsi);
   };

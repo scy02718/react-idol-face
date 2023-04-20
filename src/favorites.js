@@ -28,7 +28,6 @@ function Home(){
 }
 
 function FavoriteImages(){
-  console.log(favorites)
     return <ImageList sx={{ width: 512, height: 512, borderRadius: 5 }} cols={3} rowHeight={164}>
         {favorites.map((item) => (
             <ImageListItem key={item.seed}>
